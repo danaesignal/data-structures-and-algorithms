@@ -57,6 +57,33 @@ class BinaryTree
 
     list(queue.shift, queue) unless queue == []
   end
+
+  def bfs(query, current_node=@root, queue=[])
+    if current_node.value == query
+      return current_node
+    else
+      queue << current_node.left if current_node.left
+      queue << current_node.right if current_node.right
+
+      bfs(query, queue.shift, queue) unless queue == []
+    end
+  end
+
+  def dfs(query, current_node=@root, stack=[current_node])
+    until stack == []
+      return current_node if current_node.value == query
+      stack.unshift(current_node.right) if current_node.right
+      stack.unshift(current_node.left) if current_node.left
+      current_node = stack.shift
+    end
+  end
+
+  def dfs_rec(query, current_node=@root, stack=[current_node])
+    return current_node if current_node.value == query
+    stack.unshift(current_node.right) if current_node.right
+    stack.unshift(current_node.left) if current_node.left
+    dfs_rec(query, stack.shift, stack)
+  end
 end
 
 
@@ -66,3 +93,5 @@ money_tree = BinaryTree.new
 money_tree.build_randomized(array)
 
 puts money_tree.list
+
+puts money_tree.dfs_rec(4)
